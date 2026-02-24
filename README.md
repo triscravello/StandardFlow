@@ -68,6 +68,127 @@ models/
     - Error normalization
     - Centralized DB connection utility
     - Middleware authentication flow
+ 
+```
+├── 📜 README.md
+├── 📁 app
+│ ├── 📁 api
+│ │ ├── 📁 auth
+│ │ │ ├── 🟨 route.ts
+│ │ ├── 📁 lessons
+│ │ │ ├── 📁 [id]
+│ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 🟨 route.ts
+│ │ ├── 📁 planner
+│ │ │ ├── 📁 all
+│ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 📁 date
+│ │ │ │ ├── 📁 [date]
+│ │ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 📁 entry
+│ │ │ │ ├── 📁 [id]
+│ │ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 📁 user
+│ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 📁 week
+│ │ │ │ ├── 🟨 route.ts
+│ │ │ │ ├── 📁 unit
+│ │ │ │ │ ├── 📁 [id]
+│ │ │ │ │ │ ├── 🟨 route.ts
+│ │ ├── 📁 standards
+│ │ │ ├── 📁 [id]
+│ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 🟨 route.ts
+│ │ ├── 📁 units
+│ │ │ ├── 📁 [id]
+│ │ │ │ ├── 📁 lessons
+│ │ │ │ │ ├── 🟨 route.ts
+│ │ │ │ ├── 🟨 route.ts
+│ │ │ ├── 🟨 route.ts
+│ ├── 📄 favicon.ico
+│ ├── 🟦 layout.tsx
+│ ├── 📁 lessons
+│ │ ├── 📁 [id]
+│ │ │ ├── 🟦 page.tsx
+│ ├── 🟦 page.tsx
+│ ├── 📁 planner
+│ │ ├── 📁 week
+│ │ │ ├── 🟦 page.tsx
+│ ├── 📁 standards
+│ │ ├── 📁 [id]
+│ │ │ ├── 🟦 page.tsx
+│ │ ├── 🟦 page.tsx
+│ ├── 📁 units
+│ │ ├── 📁 [id]
+│ │ │ ├── 🟦 page.tsx
+│ │ ├── 🟦 page.tsx
+├── 📁 components
+│ ├── 📁 common
+│ │ ├── 🟦 Button.tsx
+│ │ ├── 🟦 LoadingSpinner.tsx
+│ │ ├── 🟦 Modal.tsx
+│ ├── 📁 lessons
+│ │ ├── 🟦 AddLessonForm.tsx
+│ │ ├── 🟦 LessonCard.tsx
+│ │ ├── 🟦 LessonList.tsx
+│ │ ├── 🟦 LessonObjectives.tsx
+│ ├── 📁 planner
+│ │ ├── 🟦 DayColumn.tsx
+│ │ ├── 🟦 LessonDraggable.tsx
+│ │ ├── 🟦 WeeklyPlanner.tsx
+│ ├── 📁 standards
+│ │ ├── 🟦 AddStandardForm.tsx
+│ │ ├── 🟦 StandardCard.tsx
+│ │ ├── 🟦 StandardList.tsx
+│ ├── 📁 units
+│ │ ├── 🟦 UnitCard.tsx
+│ │ ├── 🟦 UnitLessonManager.tsx
+│ │ ├── 🟦 UnitList.tsx
+├── 📄 eslint.config.mjs
+├── 🟨 global.d.ts
+├── 📁 lib
+│ ├── 🟨 auth.ts
+│ ├── 🟨 db.ts
+│ ├── 🟨 pdf.ts
+├── 🟨 middleware.ts
+├── 📁 models
+│ ├── 🟨 Lesson.ts
+│ ├── 🟨 PlannerEntry.ts
+│ ├── 🟨 Standard.ts
+│ ├── 🟨 Unit.ts
+│ ├── 🟨 UnitLesson.ts
+│ ├── 🟨 Users.ts
+├── 🟨 next-env.d.ts
+├── 🟨 next.config.ts
+├── 🗂️ package-lock.json
+├── 🗂️ package.json
+├── 📄 postcss.config.mjs
+├── 📁 public
+│ ├── 🖼️ file.svg
+│ ├── 🖼️ globe.svg
+│ ├── 🖼️ next.svg
+│ ├── 🖼️ vercel.svg
+│ ├── 🖼️ window.svg
+├── 📁 services
+│ ├── 🟨 authService.edge.ts
+│ ├── 🟨 authService.node.ts
+│ ├── 🟨 authService.ts
+│ ├── 🟨 lessonService.ts
+│ ├── 🟨 plannerService.ts
+│ ├── 🟨 standardService.ts
+│ ├── 🟨 unitLessonService.ts
+│ ├── 🟨 unitService.ts
+├── 📁 styles
+│ ├── 🎨 globals.css
+│ ├── 🎨 planner.css
+├── 🗂️ tsconfig.json
+├── 📁 utils
+│ ├── 🟨 apiErrors.ts
+│ ├── 🟨 constants.ts
+│ ├── 🟨 date.ts
+│ ├── 🟨 validators.ts
+
+```
 
 ## Core Features
 
