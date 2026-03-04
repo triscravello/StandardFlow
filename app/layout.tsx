@@ -15,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StandardFlow - Home",
-  description: "Welcome to the StandardFlow home page! A lesson planning platform for educators to organize units, lessons, and standards, and weekly plans in one structured workflow.",
+  title: {
+    default: "StandardFlow",
+    template: "%s | StandardFlow",
+  },
+  description: "StandardFlow is a lesson planning platform for educators to organize units, lessons, and standards, and weekly plans in one structured workflow.",
 };
 
 export default function RootLayout({
@@ -27,12 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`} bg-gray-50 text-gray-900
       >
-        <Navbar />
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 p-4">{children}</main>
+        <div className="flex flex-col h-screen">
+          <Navbar />
+          <div className="flex flex-1 overflow-hidden">
+            <Sidebar />
+            <main className="flex-1 p-6 overflow-y-auto bg-white">{children}</main>
+          </div>
         </div>
       </body>
     </html>
