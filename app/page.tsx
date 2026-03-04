@@ -18,10 +18,10 @@ export default function Home() {
 
         <div className="mt-10 flex justify-center gap-4">
           <Link
-            href="/dashboard"
+            href="/weekly-plans"
             className="rounded-full bg-black px-6 py-3 text-white font-medium hover:bg-zinc-800 transition dark:bg-white dark:text-black dark:hover:bg-zinc-200"
           >
-            Go to Dashboard
+            Go to Weekly Plans
           </Link>
 
           <Link
@@ -82,7 +82,7 @@ export default function Home() {
           </p>
 
           <Link
-            href="/dashboard"
+            href="/weekly-plans"
             className="mt-8 inline-block rounded-full bg-white text-black px-6 py-3 font-medium hover:bg-zinc-200 transition dark:bg-black dark:text-white dark:hover:bg-zinc-800"
           >
             Get Started
