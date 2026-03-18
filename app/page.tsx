@@ -82,7 +82,7 @@ export default function Home() {
           </p>
 
           <Link
-            href="/weekly-plans"
+            href="/signup"
             className="mt-8 inline-block rounded-full bg-white text-black px-6 py-3 font-medium hover:bg-zinc-200 transition dark:bg-black dark:text-white dark:hover:bg-zinc-800"
           >
             Get Started
