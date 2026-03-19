@@ -5,26 +5,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Sign Up", href: "/signup" },
-  { name: "Log In", href: "/login" },
+  { name: "Dashboard / Planner", href: "/planner/week" },
   { name: "Units", href: "/units" },
   { name: "Lessons", href: "/lessons" },
   { name: "Standards", href: "/standards" },
-  { name: "Weekly Plans", href: "/planner/week" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-gray-800 text-white px-6 py-4">
-      <ul className="flex space-x-6">
+    <nav className="bg-gray-800 text-white px-6 py-4 border-b border-gray-700">
+      <ul className="flex flex-wrap items-center gap-6">
         {navLinks.map((link) => {
-          const isActive =
-            link.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(link.href);
+          const isActive = pathname.startsWith(link.href);
 
           return (
             <li key={link.href}>
