@@ -1,4 +1,3 @@
-// components/lessons/AddLessonForm.tsx
 'use client';
 
 import { FormEvent, useState } from "react";
