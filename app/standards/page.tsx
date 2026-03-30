@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useState, useMemo } from "react";
 import AddStandardForm from "@/components/standards/AddStandardForm";
 import StandardList from "@/components/standards/StandardList";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { standardService, type StandardDTO } from "@/services/standardClientService";
 
 export default function StandardsPage() {
@@ -55,7 +56,7 @@ export default function StandardsPage() {
             <AddStandardForm onAddStandard={handleAddStandard} />
 
             {loading ? (
-                <p className="text-zinc-600 dark:text-zinc-400">Loading standards...</p>
+                <LoadingSpinner label="Loading standards..." />
             ) : error ? (
                 <p className="text-red-600 dark:text-red-400">{error}</p>
             ) : (

@@ -4,8 +4,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import AddLessonForm from '@/components/lessons/AddLessonForm';
 import LessonList from '@/components/lessons/LessonList';
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { lessonService, type LessonDTO } from "@/services/lessonClientService";
-import { parseJsonSourceFileConfigFileContent } from "typescript";
 
 export default function LessonsPage() {
     const [lessons, setLessons] = useState<LessonDTO[]>([]);
@@ -56,7 +56,7 @@ export default function LessonsPage() {
             <AddLessonForm onAddLesson={handleAddLesson} />
 
             {loading ? (
-                <p className="text-zinc-600 dark:text-zinc-400">Loading lessons...</p>
+                <LoadingSpinner label="Loading lessons..." />
             ) : error ? (
                 <p className="text-red-600 dark:text-red-400">{error}</p>
             ) : (

@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import UnitList from "@/components/units/UnitList";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { unitService, type UnitDTO } from "@/services/unitClientService";
 
 export default function UnitsPage() {
@@ -41,7 +42,7 @@ export default function UnitsPage() {
             </header>
 
             {loading ? (
-                <p className="text-zinc-600 dark:text-zinc-400">Loading units...</p>
+                <LoadingSpinner label="Loading units..." />
             ) : error ? (
                 <p className="text-red-600 dark:text-red-400">{error}</p>
             ) : (
