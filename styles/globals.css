@@ -1,1 +1,26 @@
 /* styles/globals.css */
+@import 'tailwindcss';
+
+:root {
+    color-scheme: light dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+input, button, textarea, select {
+    font: inherit;
+}

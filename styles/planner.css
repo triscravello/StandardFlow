@@ -1,0 +1,89 @@
+/* styles/planner.css */
+.planner-page {
+    min-height: 100%;
+    background: rgb(250 250 250);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.planner-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 4rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: rgb(255 255 255);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.planner-title {
+    text-align: center;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    background: rgb(245 245 245);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.planner-subtitle {
+    text-align: center;
+    color: rgb(113 113 122);
+    margin-bottom: 2.5rem;
+    padding: 1rem;
+    background: rgb(245 245 245);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.planner-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.planner-day-column {
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .planner-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .planner-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1280px) {
+    .planner-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+}
+
+.dark .planner-page {
+    background: black;
+}
+
+.dark .planner-day-column {
+    background: rgb(39 39 42);
+}
