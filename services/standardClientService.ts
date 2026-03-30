@@ -11,7 +11,7 @@ export interface CreateStandardPayload {
     code: string;
     description: string;
     subject: string;
-    gradeLeve: number;
+    gradeLevel: number;
 }
 
 async function parseJson<T>(res: Response): Promise<T> {
