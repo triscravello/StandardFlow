@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         requireRole(user, ['admin', 'teacher']);
 
         const { id } = params;
-        const unitLessons = await getUnitLessons(user.id, id);
+        const unitLessons = await getUnitLessons(id, user.id);
         return NextResponse.json({ success: true, data: unitLessons });
     } catch (error) {
         return handleApiError(error);
@@ -108,11 +108,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
             
             let result;
             if (action === "addLesson") {
-                result = await addLessonToUnit(user.id, id, lessonId, lessonOrder);
+                result = await addLessonToUnit(id, lessonId, user.id, lessonOrder);
             } else if (action === "removeLesson") {
-                result = await removeLessonFromUnit(user.id, id, lessonId);
+                result = await removeLessonFromUnit(id, lessonId, user.id);
             } else if (action === 'reorderLesson') {
-                result = await reorderLesson(id, lessonId, lessonOrder);
+                result = await reorderLesson(id, user.id, lessonOrder);
             } else {
                 return NextResponse.json({ error: "Invalid action" }, { status: 400 })
             }
