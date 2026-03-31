@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import Navbar from "@/components/layout/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
+import Providers from "@/app/providers";
 import "@/styles/globals.css";
 import "@/styles/planner.css";
 
@@ -37,6 +38,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}
       >
+        <Providers>
         <div className="flex flex-col h-screen">
           {isLoggedIn && <Navbar />}
           <div className="flex flex-1 overflow-hidden">
@@ -44,6 +46,7 @@ export default async function RootLayout({
             <main className="flex-1 p-6 overflow-y-auto bg-white">{children}</main>
           </div>
         </div>
+        </Providers>
       </body>
     </html>
   );

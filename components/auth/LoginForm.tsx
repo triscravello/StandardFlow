@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/authService";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
@@ -11,6 +12,7 @@ export default function LoginForm() {
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
+    const { setUser } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,8 +21,10 @@ export default function LoginForm() {
         setIsSubmitting(true);
 
         try {
-            await authService.login({ username, password });
+            const result = await authService.login({ username, password });
+            setUser(result.data.user);
             router.push("/planner/week");
+            router.refresh();
         } catch (error) {
             const message = error instanceof Error ? error.message : "Login failed. Please try again.";
             setError(message);
