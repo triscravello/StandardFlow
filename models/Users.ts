@@ -1,5 +1,5 @@
 // models/Users.ts
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, models } from 'mongoose';
 
 export interface IUser extends Document {
     username: string;
@@ -20,10 +20,10 @@ const UserSchema = new Schema<IUser>(
     { timestamps: true }
 );
 
-export const User = model<IUser>('User', UserSchema);
-
 UserSchema.index({ email: 1 });
 UserSchema.index({ username: 1 });
 UserSchema.index({ role: 1 });
 UserSchema.index({ createdAt: -1 });
 UserSchema.index({ updatedAt: -1 });
+
+export const User = models.User || model<IUser>('User', UserSchema);
