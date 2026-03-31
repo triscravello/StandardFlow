@@ -4,7 +4,6 @@ import { connectDB } from "@/lib/mongodb";
 import { authenticateUser } from "@/services/authService.node";
 import { User } from "@/models/Users";
 import { badRequest, unauthorized, internalServerError } from "@/utils/apiErrors";
-import { getTokenSourceMapRange } from "typescript";
 
 export async function POST(request: NextRequest) {
     try {
