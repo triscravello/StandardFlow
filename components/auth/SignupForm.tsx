@@ -9,16 +9,24 @@ export default function SignupForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        setSuccessMessage("");
+
+        if (!email.trim() || !password.trim()) {
+            setError("Email and password are required.");
+            return;
+        }
         setIsSubmitting(true);
 
         try {
             await authService.signup({ email, password });
+            setSuccessMessage("Account created successfully. Redirecting...")
             router.push("/planner/week");
         } catch (err) {
             const message = err instanceof Error ? err.message : "Signup failed. Please try again";
@@ -32,6 +40,7 @@ export default function SignupForm() {
         <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white rounded shadow">
             <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
+            {successMessage && <p className="text-emerald-600 mb-4">{successMessage}</p>}
             <div className="mb-4">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                 <input 

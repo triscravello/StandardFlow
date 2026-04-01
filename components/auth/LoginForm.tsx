@@ -10,6 +10,7 @@ export default function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
     const { setUser } = useAuth();
@@ -18,11 +19,18 @@ export default function LoginForm() {
         e.preventDefault();
 
         setError("");
+        setSuccessMessage("");
+
+        if (!username.trim() || !password.trim()) {
+            setError('Username and password are required.');
+            return;
+        }
         setIsSubmitting(true);
 
         try {
             const result = await authService.login({ username, password });
             setUser(result.data.user);
+            setSuccessMessage("Logged in successfully. Redirecting...");
             router.push("/planner/week");
             router.refresh();
         } catch (error) {
@@ -37,6 +45,7 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white rounded shadow">
             <h2 className="text-2xl font-semibold mb-4">Log In</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
+            {successMessage && <p className="text-emerald-600 mb-4">{successMessage}</p>}
             <div className="mb-4">
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
                 <input
