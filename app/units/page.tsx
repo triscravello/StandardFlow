@@ -32,19 +32,19 @@ export default function UnitsPage() {
     const unitCount = useMemo(() => units.length, [units]);
 
     return (
-        <main className="mx-auto max-w-6xl space-y-8 px-6 py-10">
+        <main className="mx-auto max-w-6xl space-y-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
             <header>
-                <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">Units</h1>
-                <p className="mt-1 text-zinc-600 dark:text-zinc-400">
+                <h1 className="text-3xl font-bold text-slate-900">Units</h1>
+                <p className="mt-1 text-slate-600">
                     Review your instructional units and manage the lessons assigned to each unit.
                 </p>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Total units: {unitCount}</p>
+                <p className="mt-2 text-sm text-slate-500">Total units: {unitCount}</p>
             </header>
 
             {loading ? (
                 <LoadingSpinner label="Loading units..." />
             ) : error ? (
-                <p className="text-red-600 dark:text-red-400">{error}</p>
+                <p className="text-red-600">{error}</p>
             ) : (
                 <UnitList units={units} />
             )}
