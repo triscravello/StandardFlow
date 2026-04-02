@@ -133,8 +133,8 @@ export default function WeeklyPlanner({ initialEntries = [] }: { initialEntries?
               ? "Drag and drop lessons to organize your week!"
               : "No planner entries."}
         </p>
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-        {successMessage && <p className="text-sm text-emerald-600 dark:text-emerald-400">{successMessage}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {successMessage && <p className="text-sm text-emerald-600">{successMessage}</p>}
 
         {isSyncing ? (
           <div className="flex justify-center py-6">
@@ -164,21 +164,21 @@ export default function WeeklyPlanner({ initialEntries = [] }: { initialEntries?
             <Button variant="secondary" onClick={() => setIsAddModalOpen(false)} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button type="submit" form="add-planner-form" disabled={!newLessonTitle.trim() || isSubmitting}>
+            <Button type="submit" form="add-planner-lesson-form" disabled={!newLessonTitle.trim() || isSubmitting}>
               {isSubmitting ? "Saving..." : "Save Lesson"}
             </Button>
           </>
         }
       >
         <form id="add-planner-lesson-form" onSubmit={addTask} className="space-y-2">
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-200" htmlFor="lesson-title">
+          <label className="block text-sm font-medium text-slate-700" htmlFor="planner-lesson-title">
             Lesson title
           </label>
           <input
             id="planner-lesson-title"
             value={newLessonTitle}
             onChange={(event) => setNewLessonTitle(event.target.value)}
-            className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
             placeholder="Ex: Intro to Fractions"
           />
         </form>
