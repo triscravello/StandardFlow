@@ -4,13 +4,20 @@ import { FormEvent, useState } from "react";
 import type { LessonDTO } from "@/services/lessonClientService";
 import Button from "../common/Button";
 
+interface CreateLessonInput {
+    title: string;
+    standardCode: string;
+    objectives?: string[];
+    materials?: string[];
+}
+
 interface AddLessonFormProps {
-    onAddLesson: (lesson: Omit<LessonDTO, '_id'>) => Promise<void>;
+    onAddLesson: (lesson: CreateLessonInput) => Promise<void>;
 }
 
 export default function AddLessonForm({ onAddLesson }: AddLessonFormProps) {
     const [title, setTitle] = useState('');
-    const [standardId, setStandardId] = useState('');
+    const [standardCode, setStandardCode] = useState('');
     const [objectives, setObjectives] = useState('');
     const [materials, setMaterials] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,7 +29,7 @@ export default function AddLessonForm({ onAddLesson }: AddLessonFormProps) {
         setError(null);
         setSuccessMessage(null);
 
-        if (!title.trim() || !standardId.trim()) {
+        if (!title.trim() || !standardCode.trim()) {
             setError('Title and Standard ID are required');
             return;
         }
@@ -41,13 +48,20 @@ export default function AddLessonForm({ onAddLesson }: AddLessonFormProps) {
         try {
             await onAddLesson({
                 title: title.trim(),
-                standard: standardId.trim(),
+                standardCode: standardCode.trim(),
+                objectives: objectiveItems,
+                materials: materialItems,
+            });
+
+            console.log({
+                title: title.trim(),
+                standardCode: standardCode.trim(),
                 objectives: objectiveItems,
                 materials: materialItems,
             });
 
             setTitle('');
-            setStandardId('');
+            setStandardCode('');
             setObjectives('');
             setMaterials('');
             setSuccessMessage('Lesson added successfully.');
@@ -74,11 +88,11 @@ export default function AddLessonForm({ onAddLesson }: AddLessonFormProps) {
                 </label>
 
                 <label className="space-y-1 text-sm text-slate-700">
-                    <span>Standard ID</span>
+                    <span>Standard Code</span>
                     <input
-                        value={standardId}
-                        onChange={(event) => setStandardId(event.target.value)}
-                        placeholder="67a2..."
+                        value={standardCode}
+                        onChange={(event) => setStandardCode(event.target.value)}
+                        placeholder="MA.912.DP.1.3"
                         className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
                     />
                 </label>
