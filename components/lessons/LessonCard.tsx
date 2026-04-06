@@ -10,7 +10,7 @@ export default function LessonCard({ lesson }: LessonCardProps) {
             <h3 className="text-lg font-semibold text-slate-900">{lesson.title}</h3>
 
             <p className="mt-2 text-sm text-slate-600">
-                Standard: <span className="font-medium">{lesson.standard}</span>
+                Standard: <span className="font-medium">{lesson.standardCode || lesson.standard}</span>
             </p>
 
             {lesson.objectives.length > 0 && (
