@@ -7,6 +7,14 @@ export interface UnitDTO {
     endDate: string;
 }
 
+export interface CreateUnitPayload {
+    name: string;
+    gradeLevel?: number;
+    startDate: string;
+    endDate: string;
+    lessons?: { lessonId: string; lessonOrder: number }[];
+}
+
 export interface UnitLessonDTO {
     id: string;
     lessonOrder: number;
@@ -45,6 +53,19 @@ export const unitService = {
 
         const payload = await parseJson<{ success: Boolean; data: UnitDTO[] }>(res);
         return payload.data ?? [];
+    },
+
+    async createUnit(payload: CreateUnitPayload): Promise<UnitDTO> {
+        const res = await fetch("/api/units", {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...payload, lessons: payload.lessons ?? [] }),
+        });
+
+        return parseJson<UnitDTO>(res);
     },
 
     async getUnitLessons(unitId: string): Promise<UnitLessonDTO[]> {
