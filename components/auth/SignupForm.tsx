@@ -8,6 +8,7 @@ import { authService } from "@/services/authService";
 export default function SignupForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState<"admin" | "teacher" | "viewer">("teacher");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +26,7 @@ export default function SignupForm() {
         setIsSubmitting(true);
 
         try {
-            await authService.signup({ email, password });
+            await authService.signup({ email, password, role });
             setSuccessMessage("Account created successfully. Redirecting...")
             router.push("/planner/week");
         } catch (err) {
@@ -60,6 +61,17 @@ export default function SignupForm() {
                     required
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 />
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mt-4">Role</label>
+                <select
+                    id="role"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value as "admin" | "teacher" | "viewer")}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                    <option value="admin">Admin</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="viewer">Viewer</option>
+                </select>
             </div>
             <div>
                 <button 
