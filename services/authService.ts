@@ -23,6 +23,7 @@ export interface AuthErrorResponse {
 export interface SignupPayload {
     email: string;
     password: string;
+    role: 'admin' | 'teacher' | 'viewer';
 }
 
 export interface LoginPayload {
