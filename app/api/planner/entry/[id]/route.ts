@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, requireRole } from "@/lib/auth";
 import { getPlannerEntryById } from "@/services/plannerService";
 import { unauthorized, badRequest, forbidden, internalServerError } from "@/utils/apiErrors";
+import { connectDB } from "@/lib/mongodb";
 
 // Sanitize a single planner entry
 function sanitizeEntry(entry: any) {
@@ -33,6 +34,7 @@ export async function GET(
     const entryId = params.id;
     if (!entryId) return badRequest("Missing entry id");
 
+    await connectDB();
     const plannerEntry = await getPlannerEntryById(entryId);
     if (!plannerEntry) return badRequest("Planner entry not found");
 

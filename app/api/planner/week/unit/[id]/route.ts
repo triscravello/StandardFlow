@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, requireRole } from "@/lib/auth";
 import { unauthorized, forbidden, badRequest, internalServerError } from "@/utils/apiErrors";
 import { getUnitLessonsForWeek } from "@/services/plannerService";
+import { connectDB } from "@/lib/mongodb";
 
 async function authTeacherOrAdmin(req: NextRequest) {
     const user = await requireAuth(req);
@@ -22,10 +23,10 @@ function handleRouteError(error: unknown) {
     return internalServerError();
 }
 
-export async function GET(req: NextRequest, { params }: { params: { unitId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     try {
         const user = await authTeacherOrAdmin(req);
-        const { unitId } = params;
+        const { id: unitId } = params;
         
         if (!unitId) return badRequest("Missing unitId");
 
@@ -40,6 +41,7 @@ export async function GET(req: NextRequest, { params }: { params: { unitId: stri
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return badRequest("Invalid startDate or endDate");
 
+        await connectDB();
         const unitLessons = await getUnitLessonsForWeek(user.id, unitId, startDate, endDate);
         return NextResponse.json(unitLessons);
     } catch (error) {

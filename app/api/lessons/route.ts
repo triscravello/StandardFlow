@@ -3,6 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { createLesson, getLessonByUser, getScheduledLessonsForUser } from "@/services/lessonService";
 import { requireAuth, requireRole } from "@/lib/auth";
 import { unauthorized, forbidden, internalServerError, badRequest } from "@/utils/apiErrors";
+import { connectDB } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
     try {
@@ -20,6 +21,8 @@ export async function POST(req: NextRequest) {
         if (!data.title || !data.standardCode) {
             return badRequest("Missing required fields: title or standard code");
         }
+
+        await connectDB();
 
         // Create lesson - note user.id is passed separately
         const newLesson = await createLesson(user.id, {
@@ -54,6 +57,7 @@ export async function GET(req: NextRequest) {
         const end = searchParams.get("end");
 
         if (!start && !end) {
+            await connectDB();
             const lessons = await getLessonByUser(user.id);
             return NextResponse.json(lessons);
         }
@@ -68,7 +72,8 @@ export async function GET(req: NextRequest) {
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
             return badRequest("Invalid date format");
         }
-    
+
+        await connectDB();
         const scheduledLessons = await getScheduledLessonsForUser(user.id, startDate, endDate);
         return NextResponse.json(scheduledLessons);
     } catch (error) {
