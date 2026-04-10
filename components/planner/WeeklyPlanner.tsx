@@ -109,6 +109,15 @@ export default function WeeklyPlanner({ initialEntries = [] }: { initialEntries?
       setError("Please select a lesson.")
       return;
     }
+
+    const isDuplicateForDay = (planner[selectedDay] || []).some(
+      (entry) => entry.lesson._id === selectedLessonId
+    );
+    if (isDuplicateForDay) {
+      setError("This lesson is already scheduled for that day.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -125,7 +134,8 @@ export default function WeeklyPlanner({ initialEntries = [] }: { initialEntries?
       setSuccessMessage(`Added "${createdEntry.lesson.title} to ${selectedDay}`);
     } catch (addError) {
       console.error("Error adding planner entry:", addError);
-      setError("Failed to add planner entry.")
+      const message = addError instanceof Error ? addError.message : "Failed to add planner entry.";
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }

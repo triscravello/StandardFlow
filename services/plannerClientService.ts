@@ -16,8 +16,17 @@ export interface PlannerEntryDTO {
 
 async function parseJson<T>(res: Response): Promise<T> {
     if (!res.ok) {
-        const message = await res.text();
-        throw new Error(message || `Request failed with status ${res.status}`);
+        const raw = await res.text();
+        try {
+            const parsed = JSON.parse(raw) as {
+                error?: { message?: string };
+                message?: string;
+            };
+            const parsedMessage = parsed?.error?.message || parsed?.message;
+            throw new Error(parsedMessage || raw || `Request failed with status ${res.status}`);
+        } catch {
+            throw new Error(raw || `Request failed with status ${res.status}`);
+        }
     }
 
     return res.json() as Promise<T>;
@@ -33,7 +42,19 @@ export const plannerService = {
             },
         });
 
-        return parseJson<PlannerEntryDTO[]>(res);
+        const payload = await parseJson<
+            PlannerEntryDTO[] | { success: boolean; data: PlannerEntryDTO[] }
+        >(res);
+
+        if (Array.isArray(payload)) {
+            return payload;
+        }
+
+        if (payload && typeof payload === "object" && "data" in payload && Array.isArray(payload.data)) {
+            return payload.data;
+        }
+
+        return [];
     },
 
     async create(lessonId: string, date: string): Promise<PlannerEntryDTO> {

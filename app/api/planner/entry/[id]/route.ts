@@ -12,10 +12,10 @@ function sanitizeEntry(entry: any) {
       _id: entry.lesson._id.toString(),
       title: entry.lesson.title,
     },
-    date: entry.date.toISOString(),
+    date: new Date(entry.date).toISOString(),
     user: entry.user?.toString(),
-    createdAt: entry.createdAt?.toISOString(),
-    updatedAt: entry.updatedAt?.toISOString(),
+    createdAt: entry.createdAt ? new Date(entry.createdAt).toISOString() : undefined,
+    updatedAt: entry.updatedAt ? new Date(entry.updatedAt).toISOString() : undefined,
   };
 }
 

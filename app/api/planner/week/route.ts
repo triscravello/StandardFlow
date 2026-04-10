@@ -20,10 +20,10 @@ function sanitizeEntry(entry: any) {
       _id: entry.lesson._id.toString(),
       title: entry.lesson.title,
     },
-    date: entry.date.toISOString(),
+    date: new Date(entry.date).toISOString(),
     user: entry.user?.toString(),
-    createdAt: entry.createdAt?.toISOString(),
-    updatedAt: entry.updatedAt?.toISOString(),
+    createdAt: entry.createdAt ? new Date(entry.createdAt).toISOString() : undefined,
+    updatedAt: entry.updatedAt ? new Date(entry.updatedAt).toISOString() : undefined,
   };
 }
 
@@ -71,14 +71,22 @@ export async function POST(req: NextRequest) {
 
     await connectDB();
     const plannerEntry = await addPlannerEntry(user.id, lessonId, lessonDate);
+    if (!plannerEntry.lesson?._id || !plannerEntry.lesson.title) {
+      return badRequest("Invalid lesson reference for planner entry");
+    }
 
     return NextResponse.json(sanitizeEntry(plannerEntry));
   } catch (error: any) {
+    console.error("POST /api/planner/week failed:", error);
     switch (error.message) {
       case "FORBIDDEN":
         return forbidden();
       case "UNAUTHORIZED":
         return unauthorized();
+      case "Lesson already scheduled for this user on the specified date":
+        return badRequest(error.message);
+      case "Planner entry not found after create":
+        return badRequest(error.message);
       default:
         return internalServerError();
     }
@@ -125,9 +133,13 @@ export async function PUT(req: NextRequest) {
     await connectDB();
     const updatedEntry = await reschedulePlannerEntry(entryId, dateObj);
     if(!updatedEntry) return badRequest("Planner entry not found");
+    if (!updatedEntry.lesson?._id || !updatedEntry.lesson.title) {
+      return badRequest("Invalid lesson reference for planner entry");
+    }
 
     return NextResponse.json(sanitizeEntry(updatedEntry));
   } catch (error: any) {
+    console.error("PUT /api/planner/week failed:", error);
     switch (error.message) {
       case "FORBIDDEN":
         return forbidden();
