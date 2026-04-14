@@ -2,11 +2,12 @@
 import mongoose, { ConnectOptions, Connection } from "mongoose";
 
 declare global {
-  // eslint-disable-next-line no-var
-  var mongooseCache: {
-    conn: Connection | null;
-    promise: Promise<Connection> | null;
-  } | undefined;
+  var mongooseCache:
+    | {
+        conn: Connection | null;
+        promise: Promise<Connection> | null;
+      }
+    | undefined;
 }
 
 const MONGO_URI = process.env.MONGO_URI;
@@ -22,6 +23,9 @@ const uri: string = MONGO_URI;
 
 const options: ConnectOptions = {
   bufferCommands: false, // fail fast if not connected
+  serverSelectionTimeoutMS: 10000,
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
 };
 
 let cached = global.mongooseCache;
@@ -36,7 +40,9 @@ async function dbConnect(): Promise<Connection> {
   }
 
   if (!cached!.promise) {
-    cached!.promise = mongoose.connect(uri, options).then((mongoose) => mongoose.connection);
+    cached!.promise = mongoose
+      .connect(uri, options)
+      .then((mongoose) => mongoose.connection);
   }
 
   cached!.conn = await cached!.promise;
