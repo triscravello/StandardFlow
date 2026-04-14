@@ -177,6 +177,7 @@ models/
 ├── 📁 models
 │ ├── 🟨 Lesson.ts
 │ ├── 🟨 PlannerEntry.ts
+│ ├── 🟨 Standard.js
 │ ├── 🟨 Standard.ts
 │ ├── 🟨 Unit.ts
 │ ├── 🟨 UnitLesson.ts
@@ -192,6 +193,9 @@ models/
 │ ├── 🖼️ next.svg
 │ ├── 🖼️ vercel.svg
 │ ├── 🖼️ window.svg
+├── 📁 scripts
+│ ├── 🟨 seedStandards.js
+│ ├── 🟨 seedStandards.ts
 ├── 📁 services
 │ ├── 🟨 authService.edge.ts
 │ ├── 🟨 authService.node.ts
