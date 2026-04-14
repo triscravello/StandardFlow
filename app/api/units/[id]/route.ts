@@ -5,7 +5,7 @@ import { getUnitWithLessons, updateUnit, deleteUnit } from "@/services/unitServi
 import { badRequest, forbidden, internalServerError } from "@/utils/apiErrors";
 import { connectDB } from "@/lib/mongodb";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -13,8 +13,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
         
-        const { id } = params;
-        if (!params?.id) return badRequest("Unit ID is required");
+        const { id } = await params;
+        if (!id) return badRequest("Unit ID is required");
         await connectDB();
         const unitWithLessons = await getUnitWithLessons(user.id, id);
         return NextResponse.json({ success: true, data: unitWithLessons });
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -34,8 +34,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
         
-        const { id } = params;
-        if (!params?.id) return badRequest("Unit ID is required");
+        const { id } = await params;
+        if (!id) return badRequest("Unit ID is required");
         const data = await req.json();
         await connectDB();
         const updatedUnit = await updateUnit(user.id, id, data);
@@ -48,7 +48,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -56,8 +56,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
         
-        const { id } = params;
-        if (!params?.id) return badRequest("Unit ID is required");
+        const { id } = await params;
+        if (!id) return badRequest("Unit ID is required");
         await connectDB();
         const deletedUnit = await deleteUnit(user.id, id);
         return NextResponse.json({ success: true, data: deletedUnit });

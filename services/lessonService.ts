@@ -4,8 +4,7 @@ import PlannerEntry, { IPlannerEntry } from '../models/PlannerEntry';
 import { Types } from 'mongoose';
 import Standard from '@/models/Standard';
 
-export interface IPlannerEntryPopulated
-  extends Omit<IPlannerEntry, 'lesson'> {
+export interface IPlannerEntryPopulated extends Omit<IPlannerEntry, 'lesson'> {
   lesson: ILesson;
 }
 
@@ -14,6 +13,35 @@ export interface LessonData {
     standardCode: string; // <-- frontend sends the code string
     objectives?: string[];
     materials?: string[];
+}
+
+export interface LessonDTO {
+    _id: string;
+    title: string;
+    standard: string;
+    standardCode: string;
+    objectives?: string[];
+    materials?: string[];
+}
+
+type LessonWithStandardLean = {
+    _id: Types.ObjectId;
+    title: string;
+    standard: {
+        _id: Types.ObjectId;
+        code: string;
+    };
+    objectives?: string[];
+    materials?: string[];
+};
+
+type ScheduledLessonEntry = {
+    [key: string]: unknown;
+    lesson: {
+        [key: string]: unknown;
+        standard: unknown;
+        standardCode?: unknown;
+    };
 }
 
 export async function createLesson(userId: string, lessonData: LessonData): Promise<ILesson> {
@@ -52,7 +80,7 @@ export async function getLessonById(userId: string, lessonId: string): Promise<I
     }
 }
 
-export async function getLessonByUser(userId: string): Promise<ILesson[]> {
+export async function getLessonByUser(userId: string): Promise<LessonDTO[]> {
     try {
         const lessons = await Lesson.find({ createdBy: userId })
             .populate<{ standard: { code: string } }>({
@@ -60,7 +88,7 @@ export async function getLessonByUser(userId: string): Promise<ILesson[]> {
                 select: 'code', // only fetch the code field
             })
             .sort({ createdAt: -1 })
-            .lean();
+            .lean<LessonWithStandardLean[]>();
         return lessons.map((lesson) => ({
             _id: lesson._id.toString(),
             title: lesson.title,
@@ -107,7 +135,7 @@ export async function getScheduledLessonsForUser(
     userId: string,
     startDate: Date,
     endDate: Date,
-): Promise<IPlannerEntryPopulated[]> {
+): Promise<ScheduledLessonEntry[]> {
     try {
         const scheduled = await PlannerEntry.find({
             user: new Types.ObjectId(userId),
@@ -118,7 +146,7 @@ export async function getScheduledLessonsForUser(
             match: { createdBy: userId },
             populate: { path: 'standard', select: 'code' },
         })
-        .lean<IPlannerEntryPopulated[]>();
+        .lean<ScheduledLessonEntry[]>();
 
         // Add standardCode to each lesson
         return scheduled.map(entry => ({

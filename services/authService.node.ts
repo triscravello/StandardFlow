@@ -4,11 +4,15 @@ import bcrypt from 'bcrypt';
 import { User } from '@/models/Users'; 
 import { IUser } from '@/models/Users';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
-if (!JWT_SECRET) {
-    throw new Error('JWT_SECRET is not defined in environment variables');
-}
 const SALT_ROUNDS = 10;
+
+function getJwtSecret(): string {
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+        throw new Error('JWT_SECRET is not defined in environment variables');
+    }
+    return jwtSecret;
+}
 
 export interface AuthTokenPayload {
     id: string;
@@ -32,14 +36,14 @@ export async function authenticateUser(username: string, password: string): Prom
 
     return jwt.sign(
         { id: user._id.toString(), role: user.role },
-        JWT_SECRET,
+        getJwtSecret(),
         { expiresIn: '7d' }
     );
 }
 
 export function verifyToken(token: string): AuthTokenPayload | null{
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, getJwtSecret());
 
         if (
             typeof decoded === 'object' &&

@@ -58,6 +58,15 @@ export async function getUserPlannerEntries(
   return raw.map(sanitizeEntry);
 }
 
+// Fetch all planner entrues (admin use)
+export async function getAllPlannerEntries(): Promise<IPlannerEntryPopulated[]> {
+  const raw = await PlannerEntry.find()
+    .populate<{ lesson: ILesson }>("lesson", "title")
+    .lean<PlannerEntryLean[]>();
+
+  return raw.map(sanitizeEntry);
+}
+
 // Add a planner entry
 export async function addPlannerEntry(
   userId: string,

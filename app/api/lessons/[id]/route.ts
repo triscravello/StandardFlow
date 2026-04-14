@@ -5,7 +5,7 @@ import { requireAuth, requireRole } from "@/lib/auth";
 import { unauthorized, forbidden, internalServerError, badRequest } from "@/utils/apiErrors";
 import { connectDB } from "@/lib/mongodb";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -14,9 +14,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
     
-        const { id } = params;
+        const { id } = await params;
         await connectDB();
-        const lesson = await getLessonById(user.id, params.id);
+        const lesson = await getLessonById(user.id, id);
         return NextResponse.json(lesson);
     } catch (error) {
         if (error instanceof Error && error.message === "FORBIDDEN") {
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -35,7 +35,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
     
-        const { id } = params;
+        const { id } = await params;
         const data = await req.json();
 
         await connectDB();
@@ -49,7 +49,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -58,7 +58,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
 
-        const { id } = params;
+        const { id } = await params;
 
         if (!id) return badRequest("Lesson id is required");
         await connectDB();

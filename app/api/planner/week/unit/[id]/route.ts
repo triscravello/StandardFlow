@@ -23,10 +23,10 @@ function handleRouteError(error: unknown) {
     return internalServerError();
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         const user = await authTeacherOrAdmin(req);
-        const { id: unitId } = params;
+        const { id: unitId } = await params;
         
         if (!unitId) return badRequest("Missing unitId");
 

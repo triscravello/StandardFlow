@@ -8,12 +8,13 @@ export interface AuthTokenPayload {
     exp: number;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
-if (!JWT_SECRET) {
-    throw new Error('JWT_SECRET is not defined in environment variables');
+function getSecret(): Uint8Array {
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+        throw new Error('JWT_SECRET is not defined in environment variables')
+    }
+    return new TextEncoder().encode(jwtSecret);
 }
-
-const secret = new TextEncoder().encode(JWT_SECRET);
 
 function isAuthTokenPayload(payload: any): payload is AuthTokenPayload {
     return (
@@ -32,7 +33,7 @@ function isAuthTokenPayload(payload: any): payload is AuthTokenPayload {
 
 export async function verifyTokenEdge(token: string): Promise<AuthTokenPayload | null> {
     try {
-        const { payload } = await jwtVerify(token, secret);
+        const { payload } = await jwtVerify(token, getSecret());
 
         if (isAuthTokenPayload(payload)) {
             return payload;

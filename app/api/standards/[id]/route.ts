@@ -6,17 +6,18 @@ import { badRequest, forbidden, internalServerError } from "@/utils/apiErrors";
 import dbConnect from "@/lib/db";
 
 // This API route handles GET requests to fetch a specific standard by ID
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
 
         // Authorize based on role
         requireRole(user, ["admin", "teacher", "viewer"]);
+        const { id } = await params;
 
         await dbConnect();
 
-        const standard = await getStandardById(params.id);
+        const standard = await getStandardById(id);
 
         return NextResponse.json({ success: true, data: standard });
     } catch (error) {
@@ -27,13 +28,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Autthenticate the user
         const user = await requireAuth(req);
         
         // Authorize based on role
         requireRole(user, ['admin']); // ADMIN ONLY
+        const { id } = await params;
         
         const body = await req.json();
         const { code, description, subject, gradeLevel } = body;
@@ -44,7 +46,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
         await dbConnect();
         
-        const standard = await updateStandard(params.id, body);
+        const standard = await updateStandard(id, body);
         
         return NextResponse.json({ success: true, data: standard });
     } catch (error) {
@@ -55,17 +57,18 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Autthenticate the user
         const user = await requireAuth(req);
 
         // Authorize based on role
         requireRole(user, ['admin']); // ADMIN ONLY
+        const { id } = await params;
 
         await dbConnect();
         
-        await deleteStandard(params.id);
+        await deleteStandard(id);
         
         return NextResponse.json(null, { status: 204 });
     } catch (error) {

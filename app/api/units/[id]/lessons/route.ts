@@ -11,7 +11,7 @@ function handleApiError(error: unknown) {
     return internalServerError();
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         // Authenticate the user
         const user = await requireAuth(req);
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         //Authorize based on role
         requireRole(user, ['admin', 'teacher']);
 
-        const { id } = params;
+        const { id } = await params;
         const unitLessons = await getUnitLessons(id, user.id);
         return NextResponse.json({ success: true, data: unitLessons });
     } catch (error) {
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try{
         // Authenticate the user
         const user = await requireAuth(req);
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         //Authorize based on role
         requireRole(user, ['admin', 'teacher']);
 
-        const { id } = params;
+        const { id } = await params;
         const { lessonId, lessonOrder } = (await req.json()) as { lessonId: string; lessonOrder: number };
 
         if (!lessonId) return NextResponse.json({ error: "lessonId is required" });
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try{
         // Authenticate the user
         const user = await requireAuth(req);
@@ -58,7 +58,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         //Authorize based on role
         requireRole(user, ['admin', 'teacher']);
 
-        const { id } = params;
+        const { id } = await params;
         const { lessonId } = (await req.json()) as { lessonId: string };
 
         if (!lessonId) return NextResponse.json({ error: "lessonId is required" });
@@ -70,7 +70,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try{
         // Authenticate the user
         const user = await requireAuth(req);
@@ -79,7 +79,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         //Authorize based on role
         requireRole(user, ['admin', 'teacher']);
 
-        const { id } = params;
+        const { id } = await params;
         const { lessonOrder } = (await req.json()) as { lessonOrder: string[] };
 
         if (!lessonOrder || !Array.isArray(lessonOrder)) {
@@ -93,7 +93,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
             // Authenticate the user
             const user = await requireAuth(req);
@@ -102,7 +102,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
             // Authorize based on role
             requireRole(user, ['admin', 'teacher']);
             
-            const { id } = params;
+            const { id } = await params;
             const data = await req.json();
             const { action, lessonId, lessonOrder } = data;
             

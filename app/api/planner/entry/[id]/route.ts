@@ -21,7 +21,7 @@ function sanitizeEntry(entry: any) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate
@@ -31,7 +31,8 @@ export async function GET(
     // Authorize
     requireRole(user, ["admin", "teacher"]);
 
-    const entryId = params.id;
+    const { id } = await params;
+    const entryId = id;
     if (!entryId) return badRequest("Missing entry id");
 
     await connectDB();

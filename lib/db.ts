@@ -10,17 +10,6 @@ declare global {
     | undefined;
 }
 
-const MONGO_URI = process.env.MONGO_URI;
-
-if (!MONGO_URI) {
-  throw new Error(
-    "Please define the MONGO_URI environment variable inside .env.local"
-  );
-}
-
-// TypeScript knows `uri` is definitely a string
-const uri: string = MONGO_URI;
-
 const options: ConnectOptions = {
   bufferCommands: false, // fail fast if not connected
   serverSelectionTimeoutMS: 10000,
@@ -35,6 +24,13 @@ if (!cached) {
 }
 
 async function dbConnect(): Promise<Connection> {
+  const uri = process.env.MONGO_URI;
+  if (!uri) {
+    throw new Error(
+      "Please define the MONGO_URI environment variable inside .env.local"
+    );
+  }
+  
   if (cached!.conn) {
     return cached!.conn;
   }

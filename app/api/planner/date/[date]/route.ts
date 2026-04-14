@@ -6,7 +6,7 @@ import { getLessonsScheduledOnDate } from "@/services/plannerService";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { date: string } }
+    { params }: { params: Promise<{ date: string }> }
 ) {
     try {
         // Authenticate the user
@@ -16,7 +16,8 @@ export async function GET(
         // Authorize based on role
         requireRole(user, ['admin', 'teacher']);
 
-        const date = new Date(params.date);
+        const { date: dateParam } = await params;
+        const date = new Date(dateParam);
         if (isNaN(date.getTime())) {
             return badRequest('Invalid date format');
         }
